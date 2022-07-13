@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>vue-admin-template组件关系</title>
+    <style>
+        * {
+            padding: 7px;
+        }
+
+        .Root {
+            background-color: pink;
+        }
+
+        .App {
+            background-color: aquamarine;
+        }
+
+        .Layout {
+            background-color: darksalmon;
+        }
+
+        .Layout div {
+            margin: 10px 0;
+        }
+
+        .Sidebar {
+            background-color: khaki;
+        }
+
+        .Navbar {
+            background-color: thistle;
+        }
+
+        .AppMain {
+            background-color: skyblue;
+        }
+
+        .span {
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="Root">
+        <h4>vm实例对象</h4>
+        <div class="App">
+            <h4>App组件</h4>
+            <span class="span">有&lt;router-view/&gt;，这是Layout组件的出口</span>
+            <div class="Layout">
+                <h4>Layout组件</h4>
+                <span class="span">由于路由的第一级总是Layout，后一级是Layout的childern，所以Layout总是出现；而后一级的路由则在AppMain的路由出口处出现</span>
+                <div class="Sidebar">
+                    <h4>Sidebar组件</h4>
+                </div>
+                <div class="Navbar">
+                    <h4>Navbart组件</h4>
+                </div>
+                <div class="AppMain">
+                    <h4>AppMain组件</h4>
+                    <span class="span">有&lt;router-view/&gt;，这是点击跳转时，路由的出口</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ul>
+        <li>固定组件的，需要在父组件中注册</li>
+        <li>在&lt;router-view/&gt;出现的，不需要在父组件中注册</li>
+        <li>即：Sidebar组件、Navbart组件、AppMain组件需要在Layout组件中注册并使用</li>
+        <li>而，Layout组件不需要在App组件中注册</li>
+        <li>vm实例对象通过 el:'#app' 获取App组件</li>
+    </ul>
+</body>
+
+</html>

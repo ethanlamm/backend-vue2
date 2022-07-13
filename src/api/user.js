@@ -1,5 +1,7 @@
+// 引入axios
 import request from '@/utils/request'
 
+// 对axios进行二次封装
 // 登录
 export function login(data) {
   return request({
