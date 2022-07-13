@@ -29,6 +29,8 @@
 import { mapGetters } from "vuex";
 import Breadcrumb from "@/components/Breadcrumb";
 import Hamburger from "@/components/Hamburger";
+// 修改
+import { resetRouter } from "@/router";
 
 export default {
   components: {
@@ -48,7 +50,9 @@ export default {
       // 清空数据
       sessionStorage.clear();
       // 清空vuex要在跳转login页面后再清除
-      window.location.reload();
+      // window.location.reload();
+      // 重置路由
+      resetRouter();
     },
   },
 };

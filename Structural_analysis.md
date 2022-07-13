@@ -13,9 +13,44 @@ src
     ------components文件夹：一般放置非路由组件获取全局组件 
     ------icons这个文件夹的里面放置了一些svg矢量图 
     ------layout文件夹：他里面放置一些组件与混入 
-    ------router文件夹：与路由相关的 -----store文件夹：一定是与vuex先关的 
-    -----style文件夹：与样式先关的 
-    ------utils文件夹：request.js是axios二次封装文件**** 
+    ------router文件夹：与路由相关的 
+    ------store文件夹：一定是与vuex先关的 
+    ------style文件夹：与样式相关的 
+    ------utils文件夹
+           ----request.js是axios二次封装文件
+           ----auth.js封装token相关函数
+           ----validate.js表单验证
     ------views文件夹：里面放置的是路由组件
 
-App.vue:根组件 main.js：入口文件 permission.js:与导航守卫先关、 settings：项目配置项文件 .env.development .env.producation
+App.vue:根组件
+
+main.js：入口文件
+
+permission.js:与导航守卫先关
+
+settings：项目配置项文件
+
+webpackage配置文件：
+    .env.development：开发环境
+        VUE_APP_BASE_API = '/dev-api'
+        ==> 通过 process.env.VUE_APP_BASE_API 获取
+        ==> utils/request.js：baseURL: process.env.VUE_APP_BASE_API
+        ==> vue.config.js：走代理 ==> 
+            proxy: {
+                "/dev-api": {
+                    target: "http://gmall-h5-api.atguigu.cn",
+                    pathRewrite: { "^/dev-api": "" }
+                }
+    },
+    .env.producation: 生产环境
+    .env.staging：测试环境
+
+.eslintignore：忽略eslint校验配置文件
+
+.eslintrc.js：eslint配置文件
+
+.gitignore：git忽略文件
+
+.jsconfig.js：src别名配置文件
+
+vue.config.js：相当于webpackage配置文件

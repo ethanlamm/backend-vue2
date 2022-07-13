@@ -35,10 +35,13 @@ const mutations = {
   SET_USERINFO: (state, userInfo) => {
     state.name = userInfo.name
     state.avatar = userInfo.avatar
+
     state.routes = userInfo.routes
     sessionStorage.setItem('routes', JSON.stringify(userInfo.routes))
+
     state.buttons = userInfo.buttons
     sessionStorage.setItem('buttons', JSON.stringify(userInfo.buttons))
+
     state.roles = userInfo.roles
 
   },
