@@ -1,9 +1,12 @@
 <template>
   <div>
-    <el-card style="margin: 20px 0"
-      ><CategorySelect :isDisabled="isDisabled"></CategorySelect
-    ></el-card>
-    <el-card><AttrList></AttrList></el-card>
+    <el-card style="margin: 20px 0">
+      <!-- CategorySelect：在attr和spu均使用，封装全局组件 ==> components/CategorySelect -->
+      <CategorySelect :isDisabled="isDisabled"></CategorySelect>
+    </el-card>
+    <el-card>
+      <AttrList></AttrList>
+    </el-card>
   </div>
 </template>
 

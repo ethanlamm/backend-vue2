@@ -1,6 +1,8 @@
 <template>
-  <el-form :inline="true" class="demo-form-inline">
-    <el-form-item label="一级分类" :model="cForm">
+  <!-- :inline="true"：行内表单 -->
+  <el-form :inline="true" class="demo-form-inline" :model="cForm">
+    <el-form-item label="一级分类">
+      <!-- v-model：收集的是option的value  -->
       <el-select
         placeholder="请选择"
         v-model="cForm.category1Id"

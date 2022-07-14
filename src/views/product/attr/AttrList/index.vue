@@ -2,6 +2,7 @@
   <div>
     <!-- 第一部分：展示数据 -->
     <div v-show="flag">
+      <!-- 按钮 -->
       <el-button
         type="primary"
         icon="el-icon-plus"
@@ -11,6 +12,8 @@
         v-permission="{ action: 'add', effect: 'disabled' }"
         >添加属性</el-button
       >
+      <!-- 表格 -->
+      <!-- :data="list"：展示数据 -->
       <el-table style="width: 100%" :data="list" border>
         <el-table-column label="序号" width="80px" type="index" align="center">
         </el-table-column>
@@ -98,6 +101,7 @@
           </template>
         </el-table-column>
         <!-- 操作 -->
+        <!-- @onConfirm：element-UI 2.13.2版本 ==> package.json -->
         <el-table-column label="操作" width="width">
           <template slot-scope="{ row, $index }">
             <el-popconfirm
@@ -114,6 +118,7 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- 保存修改和取消修改 -->
       <el-button
         type="primary"
         @click="saveAttr"
@@ -157,6 +162,7 @@ export default {
     async getData() {
       this.list = [];
       let { category1Id, category2Id, category3Id } = this;
+      // 有category3Id才发请求
       let result = category3Id
         ? await this.$api.attr.reqAttrInfo(
             category1Id,
@@ -171,12 +177,14 @@ export default {
     },
     // 从CategorySelect获取Id
     getCategoryId(category1Id, category2Id, category3Id) {
+      // console.log("@@", category1Id, category2Id, category3Id);
       this.category1Id = category1Id;
       this.category2Id = category2Id;
       this.category3Id = category3Id;
     },
-    // 添加属性
+    // 点击添加属性按钮
     add() {
+      // 弹出表格
       this.flag = false;
       // 清空数据
       this.baseAttrInfo = {
@@ -189,9 +197,10 @@ export default {
     // 修改属性
     edit(row) {
       this.flag = false;
-      // 先展示所选数据
+      // 展示所选数据：(多层数据)深拷贝--数据隔离
       this.baseAttrInfo = cloneDeep(row);
     },
+    // 点击取消修改按钮
     hide() {
       this.flag = true;
     },
@@ -200,12 +209,13 @@ export default {
       this.baseAttrInfo.attrValueList.push({
         attrId: this.baseAttrInfo.id, // 属性名相应Id
         valueName: "", // 属性值
-        flag: true,
+        flag: true, // 每次新增数据，均先展示input框，即新增的默认input为显示状态 flag: true
       });
       this.$nextTick(() => {
         this.$refs[this.baseAttrInfo.attrValueList.length - 1].focus();
       });
     },
+    // input框blur事件
     hideInput(row) {
       // 输入为空
       let valueName = row.valueName.trim();
@@ -229,17 +239,23 @@ export default {
       // 隐藏input
       row.flag = false;
     },
+    // 点击span显示input，并且自动获取焦点
     showInput(row, index) {
+      // 由于服务器返回的原数据中没有flag(控制input的显示和隐藏)，因此要新增这个响应式数据
+      // 显示input
       if (!row.flag) {
         this.$set(row, "flag", true);
       }
       row.flag = true;
+      // 由于是v-if和v-else控制，因此用$nextTick获取后出现的input
       this.$nextTick(() => {
+        // 给input打的ref标记
         this.$refs[index].focus();
       });
     },
     // 删除属性值
     deleteAttrValue(index) {
+      // 此处删除不需要发请求，在点击保存按钮时统一发请求
       this.baseAttrInfo.attrValueList.splice(index, 1);
     },
     // 保存修改
@@ -247,11 +263,10 @@ export default {
       // 整理数据
       this.baseAttrInfo.attrValueList = this.baseAttrInfo.attrValueList.filter(
         (item) => {
-          // 去除属性值为空的
+          // 去除属性值为空的 item.valueName ==> 即input框为空的项
           if (item.valueName) {
-            // 删除flag属性
-            delete item.flag;
-            return true;
+            // 删除flag属性，服务器保存的数据不需要此属性
+            return delete item.flag;
           }
         }
       );
