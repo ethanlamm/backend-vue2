@@ -57,6 +57,7 @@
       layout="prev, pager, next, jumper,->,sizes,total"
     >
     </el-pagination>
+
     <!-- 对话框 -->
     <el-dialog
       :title="tmForm.id ? '修改品牌' : '添加品牌'"
@@ -64,12 +65,13 @@
       @closed="clear"
     >
       <!-- :model="tmForm"  收集表单数据到 tmForm -->
+      <!-- 分别收集：v-model="tmForm.tmName" -->
       <el-form style="width: 80%" :model="tmForm" :rules="rules" ref="tmForm">
         <el-form-item label="品牌名称" label-width="100px" prop="tmName">
           <el-input autocomplete="off" v-model="tmForm.tmName"></el-input>
         </el-form-item>
         <el-form-item label="品牌LOGO" label-width="100px" prop="logoUrl">
-          <!-- 在el-upload中，action是上传的地址，在文档中有 -->
+          <!-- 在el-upload中，action是上传的地址，在文档中有，需要加上"/dev-api" -->
           <el-upload
             class="avatar-uploader"
             action="/dev-api/admin/product/fileUpload"
@@ -107,13 +109,13 @@ export default {
       total: 0,
       // 显示与隐藏对话框
       dialogFormVisible: false,
-      // 收集表单数据
+      // 收集表单数据，关键字根据文档
       tmForm: {
         tmName: "",
         logoUrl: "",
       },
-      // 验证规则
-      // 只需要通过 rules 属性传入约定的验证规则，并将 Form-Item 的 prop 属性设置为需校验的字段名即可
+      // 验证规则 element-UI Form表单
+      // 只需要通过 rules 属性传入约定的验证规则，并将 el-form-item 的 prop 属性设置为需校验的字段名即可
       rules: {
         tmName: [
           { required: true, message: "请输入品牌名称", trigger: "blur" },
@@ -171,18 +173,19 @@ export default {
       }
       return isJPG && isLt2M;
     },
-    // 关闭后清空
+    // 关闭对话框后清空，dialog自带属性与方法
     clear() {
       this.tmForm.tmName = "";
       this.tmForm.logoUrl = "";
       this.tmForm.id = "";
     },
-    // 添加或修改--按确定键
+    // 添加或修改--点击确定键
     addorupdate() {
       this.$refs.tmForm.validate(async (success) => {
         if (success) {
           // 关闭对话框
           this.dialogFormVisible = false;
+          // 携带发请求
           let result = await this.$api.trademark.reqAddOrUpdate(this.tmForm);
           if (result.code == 200) {
             // 弹出信息
@@ -201,7 +204,11 @@ export default {
     // 编辑
     edit(row) {
       this.dialogFormVisible = true;
-      // 浅拷贝
+      console.log(row);
+      // 浅拷贝：直接赋值 ==> this.tmForm = row；这两者指向同一个地址，数据共享
+      // 深拷贝：两者数据独立，互不干扰
+      // 扩展运算符：即不是深拷贝，也不是浅拷贝；但其能深拷贝第一层，深层次的依然是浅拷贝
+      // 这里只有一层，正好用到扩展运算符第一层的深拷贝
       this.tmForm = { ...row };
     },
     // 删除
@@ -212,15 +219,18 @@ export default {
         type: "warning",
       })
         .then(async () => {
-          // 发请求
+          // 点击确认按钮，发请求
           let result = await this.$api.trademark.reqDelete(row.id);
           if (result.code == 200) {
             this.$message({
               type: "success",
               message: "删除成功!",
             });
-            // 再次获取数据
-            this.getData(this.list.length > 1 ? this.page : this.page - 1);
+            // 再次获取数据，判断当前页数据条数
+            // this.list 是未删除前的数据；如果未删除前的数据是>1；则删除一条后，展示当前页，否则展示上一页
+            // 处理第一页
+            let lastPage = this.page == 1 ? 1 : this.page - 1;
+            this.getData(this.list.length > 1 ? this.page : lastPage);
           }
         })
         .catch(() => {

@@ -119,7 +119,7 @@ const componentRoutes = [
 // 404路由放最后！！！！
 const errorRoute = { path: '*', redirect: '/404', hidden: true }
 
-// 待补全的路由
+// 待补全的路由(常量路由)
 export const constantRoutes = [
   {
     path: '/login',
