@@ -246,10 +246,12 @@ export default {
 .el-carousel__item:nth-child(2n + 1) {
   background-color: #d3dce6;
 }
+
+/* 轮播图底部样式自定义 */
 .el-carousel__button {
-  width: 10px;
+  width: 20px;
   height: 10px;
-  background: red;
-  border-radius: 50%;
+  background: skyblue;
+  border-radius: 5px;
 }
 </style>
