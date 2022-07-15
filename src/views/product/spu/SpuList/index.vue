@@ -96,6 +96,7 @@
       :visible.sync="dialogTableVisible"
       @closed="closeDialog"
     >
+      <!-- 遮罩效果：v-loading="loading" -->
       <el-table :data="skuList" style="width: 100%" v-loading="loading">
         <el-table-column prop="skuName" label="名称" width="width">
         </el-table-column>
@@ -133,7 +134,9 @@ export default {
       // 展示SKU列表
       spu: {},
       skuList: [],
+      // sku列表信息默认不显示
       dialogTableVisible: false,
+      // loading效果默认开启，等数据回来时关闭
       loading: true,
     };
   },
@@ -218,11 +221,13 @@ export default {
       let result = await this.$api.spu.reqSkuInfo(row.id);
       if (result.code == 200) {
         this.skuList = result.data;
+        // 关闭loading
         this.loading = false;
       }
     },
     // 关闭sku(dialog)
     closeDialog() {
+      // 注意：sku列表信息关闭后，要重置数据!!!!!!!!!!!!!!!!!!!
       // 清空数据
       this.skuList = [];
       this.loading = true;
