@@ -186,7 +186,7 @@ export default {
         // 新增返回第一页，新增的spu均在第一条展示
         this.pageChange(1);
       } else {
-        // 停留在当前页(修改|取消|新增sku)
+        // 停留在当前页(修改spu|新增sku|取消)
         this.pageChange(this.page);
       }
     },
@@ -243,6 +243,7 @@ export default {
       handler() {
         this.$nextTick(() => {
           let { screen } = this;
+          // 这个是和三级联动相关的
           this.$bus.$emit("sendScreen", screen);
         });
       },
