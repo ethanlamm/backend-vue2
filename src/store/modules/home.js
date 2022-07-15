@@ -3,6 +3,7 @@ import mockRequest from '@/utils/mockRequest';
 const actions = {
     // 获取mock数据
     async getMockData({ commit }) {
+        // 发请求
         let result = await mockRequest.get('/home/list')
         if (result.code == 20000) {
             commit('GETDATA', result.data)

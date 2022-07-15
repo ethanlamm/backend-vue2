@@ -3,11 +3,14 @@ const { param2Obj } = require('./utils')
 
 const user = require('./user')
 const table = require('./table')
+
+// 引入自定义的mock
 const homeMock = require('./homeMock')
 
 const mocks = [
   ...user,
   ...table,
+  // 放入mocks中
   ...homeMock
 ]
 

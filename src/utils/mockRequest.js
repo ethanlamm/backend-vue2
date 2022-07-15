@@ -5,6 +5,7 @@ import { getToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
+  // 将request.js复制一份，然后修改为 VUE_APP_MOCK_API
   baseURL: process.env.VUE_APP_MOCK_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout

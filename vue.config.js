@@ -45,7 +45,7 @@ module.exports = {
         pathRewrite: { "^/dev-api": "" }
       }
     },
-    // 开启mock数据
+    // 开启mock数据，before 改为 after，引入 /mock/mock-server
     after: require('./mock/mock-server')
   },
   configureWebpack: {

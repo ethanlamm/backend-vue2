@@ -38,7 +38,7 @@
           </div>
           <div><CatrgoryEchart :data="dataList"></CatrgoryEchart></div>
           <el-button-group>
-            <el-button type="primary" size="small">全部渠道</el-button>
+            <!-- <el-button type="primary" size="small">全部渠道</el-button> -->
             <el-button
               type="primary"
               size="small"
@@ -104,11 +104,12 @@ export default {
   data() {
     return {
       list: [1, 2],
-      screen: "all",
+      screen: "online",
       dataList: [],
     };
   },
   computed: {
+    // vuex中存储了mock数据，到需要数据的地方拿
     ...mapGetters("home", ["saleRank"]),
     online() {
       return this.saleRank.online || {};
@@ -120,13 +121,13 @@ export default {
       let { online } = this;
       let name = online.name;
       let value = online.value;
-      return name.map((name, i) => ({ name, value: value[i] }));
+      return name && name.map((name, i) => ({ name, value: value[i] }));
     },
     shopList() {
       let { shop } = this;
       let name = shop.name;
       let value = shop.value;
-      return name.map((name, i) => ({ name, value: value[i] }));
+      return name && name.map((name, i) => ({ name, value: value[i] }));
     },
   },
   methods: {
@@ -136,6 +137,14 @@ export default {
       } else {
         this.dataList = this.shopList;
       }
+    },
+  },
+  watch: {
+    screen: {
+      immediate: true,
+      handler(newValue) {
+        this.$nextTick(() => this.changEchart(newValue));
+      },
     },
   },
 };

@@ -34,6 +34,7 @@ function unregisterRoutes() {
 // for mock server
 const responseFake = (url, type, respond) => {
   return {
+    // 这里：process.env.VUE_APP_BASE_API 改为 VUE_APP_MOCK_API
     url: new RegExp(`${process.env.VUE_APP_MOCK_API}${url}`),
     type: type || 'get',
     response(req, res) {
