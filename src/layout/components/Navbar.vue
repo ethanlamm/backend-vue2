@@ -29,7 +29,7 @@
 import { mapGetters } from "vuex";
 import Breadcrumb from "@/components/Breadcrumb";
 import Hamburger from "@/components/Hamburger";
-// 修改
+// 从router.js中引入重置路由函数
 import { resetRouter } from "@/router";
 
 export default {
@@ -51,7 +51,7 @@ export default {
       sessionStorage.clear();
       // 清空vuex要在跳转login页面后再清除
       // window.location.reload();
-      // 重置路由
+      // 重置路由：要在页面跳转至登录页后!!!!
       resetRouter();
     },
   },
