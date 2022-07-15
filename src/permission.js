@@ -37,7 +37,7 @@ router.beforeEach(async (to, from, next) => {
           // get user info-->store/modules/user.js
           await store.dispatch('user/getInfo')    // store的代码执行完毕后才拿到用户信息
 
-          // 记住：拿到用户信息后，才调用动态添加路由的函数
+          // 记住：拿到用户信息(权限信息，包括路由权限、按钮权限等)后，才调用动态添加路由的函数
           // 调用动态添加路由的函数->router/index.js
           initDynamicRoute()    // 所以在permission中调用该方法
 

@@ -9,6 +9,7 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 
+//#region 
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -33,8 +34,10 @@ import Layout from '@/layout'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
+//#endregion
 
-// 要被添加的动态路由
+// 第一步：将动态路由分离出来(包括404)
+// 1.1要被添加的动态路由
 const componentRoutes = [
   // 商品管理
   {
@@ -116,7 +119,7 @@ const componentRoutes = [
       },
     ]
   }]
-// 404路由放最后！！！！
+// 1.2 404路由放最后！！！！
 const errorRoute = { path: '*', redirect: '/404', hidden: true }
 
 // 待补全的路由(常量路由)
@@ -147,10 +150,12 @@ export const constantRoutes = [
   // 404 page must be placed at the end !!!
 ]
 
+// 第二步：创建添加动态路由的函数并暴露出去
 // 根据routes整合完整路由---函数
 export function initDynamicRoute() {
-  let permissionRoutes = store.state.user.routes    // 从服务器返回的用户路由
+  let permissionRoutes = store.state.user.routes    // 从服务器返回的用户路由存储在vuex中
   // 对应关系 路由的name 与 permissionRoutes(数组)元素
+  // 从动态路由中筛选出用户的权限路由
   let tempRoutes = componentRoutes.filter(item => {
     return item.children = item.children.filter(subitem => {
       return permissionRoutes.includes(subitem.name)
@@ -158,12 +163,12 @@ export function initDynamicRoute() {
   })
   // 整合路由--push是响应式的，concat不是
   tempRoutes.forEach(item => {
-    constantRoutes.push(item)
+    constantRoutes.push(item)   // push到常量路由中
   })
   // 最后整合404
   constantRoutes.push(errorRoute)
 
-  // constantRoutes变化后，router要更新
+  // constantRoutes变化后，router要更新!!!!!!!!
   router.addRoutes(constantRoutes)    // -->permission.js
 }
 

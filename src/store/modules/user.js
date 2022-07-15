@@ -2,19 +2,19 @@ import { login, logout, getInfo } from '@/api/acl/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 // import { resetRouter } from '@/router'
 
-const getDefaultState = () => {
-  return {
-    token: getToken(),
-    name: '',
-    avatar: '',
-    // 角色
-    roles: [],
-    // 相应路由
-    routes: [],
-    // 相应按钮
-    buttons: [],
-  }
-}
+// const getDefaultState = () => {
+//   return {
+//     token: getToken(),
+//     name: '',
+//     avatar: '',
+//     // 角色
+//     roles: [],
+//     // 相应路由
+//     routes: [],
+//     // 相应按钮
+//     buttons: [],
+//   }
+// }
 
 const state = {
   token: getToken(),
@@ -35,17 +35,17 @@ const mutations = {
   SET_USERINFO: (state, userInfo) => {
     state.name = userInfo.name
     state.avatar = userInfo.avatar
-
+    // 用户的权限路由
     state.routes = userInfo.routes
     sessionStorage.setItem('routes', JSON.stringify(userInfo.routes))
 
+    // 用户权限按钮
     state.buttons = userInfo.buttons
     sessionStorage.setItem('buttons', JSON.stringify(userInfo.buttons))
 
     state.roles = userInfo.roles
 
   },
-
 }
 
 const actions = {

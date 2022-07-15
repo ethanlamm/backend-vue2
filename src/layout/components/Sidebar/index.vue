@@ -39,6 +39,7 @@ export default {
     };
   },
   created() {
+    // 拿到用户完整的权限路由，赋值
     // 传入数据 this.$router.options.routes 即为整合后的完整路由
     this.routes = this.$router.options.routes;
   },
