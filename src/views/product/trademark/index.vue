@@ -229,8 +229,11 @@ export default {
             // 再次获取数据，判断当前页数据条数
             // this.list 是未删除前的数据；如果未删除前的数据是>1；则删除一条后，展示当前页，否则展示上一页
             // 处理第一页
-            let lastPage = this.page == 1 ? 1 : this.page - 1;
-            this.getData(this.list.length > 1 ? this.page : lastPage);
+            // let lastPage = this.page == 1 ? 1 : this.page - 1;
+            // this.getData(this.list.length > 1 ? this.page : lastPage);
+            // 上一页与当前页
+            // 由于element-UI的分页器的处理，当页数为0时，自动跳至第1页，所以也不需要处理第一页的问题
+            this.getData(this.list.length > 1 ? this.page : this.page - 1);
           }
         })
         .catch(() => {

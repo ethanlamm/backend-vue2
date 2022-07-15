@@ -22,6 +22,7 @@
         </el-table-column
         ><el-table-column prop="prop" label="操作" width="width">
           <template slot-scope="{ row }">
+            <!-- title：文字提示 -->
             <el-button
               type="success"
               icon="el-icon-plus"
@@ -75,6 +76,8 @@
       >
       </el-pagination>
     </div>
+
+    <!-- 第二部分、第三部分、第四部分按需展示 -->
     <!-- 第二部分:添加或修改SPU -->
     <spuForm
       v-show="screen == 1"
@@ -125,6 +128,7 @@ export default {
       page: 1,
       limit: 3,
       total: 0,
+      // screen:控制显示spu表格、sku表格、sku列表
       screen: 0,
       // 展示SKU列表
       spu: {},
@@ -179,7 +183,7 @@ export default {
       // 子组件通知父组件切换场景，并再次获取数据展示
       this.screen = screen;
       if (flag == "新增spu") {
-        // 新增返回第一页
+        // 新增返回第一页，新增的spu均在第一条展示
         this.pageChange(1);
       } else {
         // 停留在当前页(修改|取消|新增sku)

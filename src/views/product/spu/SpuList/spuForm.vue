@@ -38,10 +38,11 @@
           <img width="100%" :src="dialogImageUrl" alt="" />
         </el-dialog>
       </el-form-item>
+      <!-- 销售属性 -->
       <el-form-item label="销售属性">
         <!-- 选项 -->
         <el-select
-          :placeholder="`还有${unSelectAttr.length}项未选择`"
+          :placeholder="`还有 ${unSelectAttr.length} 项未选择`"
           v-model="attr"
         >
           <el-option
@@ -52,12 +53,13 @@
           >
           </el-option>
         </el-select>
-        <!-- 按钮 -->
+        <!-- 按钮：添加销售属性 -->
         <el-button
           type="primary"
           icon="el-icon-plus"
           :disabled="!attr"
           @click="handleAddAttr"
+          style="margin-left: 10px; margin-bottom: 10px"
           >添加销售属性</el-button
         >
         <!-- 表格 -->
@@ -80,11 +82,13 @@
                 closable
                 :disable-transitions="false"
                 @close="row.spuSaleAttrValueList.splice(index, 1)"
+                style="margin-bottom: 5px"
               >
                 {{ tag.saleAttrValueName }}
               </el-tag>
               <!-- @keyup.enter.native="handleInputConfirm" -->
               <!-- @blur="handleInputConfirm" -->
+              <!-- inputVisible:是绑定在当前row的，解决点击时，全部input框同时出现的问题 -->
               <el-input
                 class="input-new-tag"
                 v-if="row.inputVisible"
@@ -135,15 +139,18 @@ export default {
         category3Id: 0,
         description: "",
         spuImageList: [
+          //#region
           // {
           //   id: 0,
           //   imgName: "string",
           //   imgUrl: "string",
           //   spuId: 0,
           // },
+          //#endregion
         ],
         spuName: "",
         spuSaleAttrList: [
+          //#region
           // {
           //   baseSaleAttrId: 0,
           //   id: 0,
@@ -160,6 +167,7 @@ export default {
           //     },
           //   ],
           // },
+          //#endregion
         ],
         tmId: "",
       },
@@ -231,17 +239,6 @@ export default {
     async addInitSpu(category3Id) {
       // 清除数据
       Object.assign(this._data, this.$options.data());
-      // // 清空spuForm以及照片墙
-      // this.spu = {
-      //   category3Id: 0,
-      //   description: "",
-      //   spuImageList: [],
-      //   spuName: "",
-      //   spuSaleAttrList: [],
-      //   tmId: "",
-      // };
-      // this.spuImage = [];
-      // 传入category3Id
       this.spu.category3Id = category3Id;
       // 获取销售属性
       let saleAttr = await this.$api.spu.reqSaleAttr();
@@ -263,10 +260,10 @@ export default {
       let newAttr = { baseSaleAttrId, saleAttrName, spuSaleAttrValueList: [] };
       // 添加至spuSaleAttrList中
       this.spu.spuSaleAttrList.push(newAttr);
-      // 清空选项
+      // 清空选项(双向绑定)
       this.attr = "";
     },
-    // 显示input
+    // 点击button显示input
     showInput(row, index) {
       this.$set(row, "inputVisible", true);
       this.$set(row, "inputValue", "");
@@ -274,7 +271,7 @@ export default {
         this.$refs[index].focus();
       });
     },
-    // 隐藏input
+    // input失去焦点隐藏input
     hideInput(row) {
       // console.log(row);
       let { baseSaleAttrId, inputValue } = row;
@@ -283,11 +280,13 @@ export default {
       let saleAttrValueName = inputValue.trim();
       if (saleAttrValueName == "") {
         this.$message.warning("属性值不能为空");
+        // 清空无效值
         row.inputValue = "";
+        // 隐藏input框，显示button按钮
         row.inputVisible = false;
         return;
       }
-      // 输入不能重复
+      // 输入不能重复，这里还没有push，所以不用排除自身
       let repeat = row.spuSaleAttrValueList.some(
         (item) => item.saleAttrValueName == saleAttrValueName
       );
@@ -299,6 +298,7 @@ export default {
       // 整理数据
       let newSaveAttrValue = { baseSaleAttrId, saleAttrValueName };
       row.spuSaleAttrValueList.push(newSaveAttrValue);
+      // 最后隐藏input
       row.inputVisible = false;
     },
     // 保存按钮
@@ -314,16 +314,19 @@ export default {
       let result = await this.$api.spu.reqAddOrUpdate(this.spu);
       if (result.code == 200) {
         this.$message.success(this.spu.id ? "修改成功" : "新增成功");
+        // 成功后，关闭(隐藏)spuForm
+        this.$emit("changeScreen", {
+          screen: 0,
+          flag: this.spu.id ? "修改" : "新增spu",
+        });
       }
-      this.$emit("changeScreen", {
-        screen: 0,
-        flag: this.spu.id ? "修改" : "新增spu",
-      });
     },
     // 取消按钮
     cancel() {
       this.$emit("changeScreen", { screen: 0, flag: "取消" });
       // 清除数据
+      // console.log(this._data);
+      // console.log(this.$options.data);
       Object.assign(this._data, this.$options.data());
     },
   },

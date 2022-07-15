@@ -1,9 +1,11 @@
 <template>
   <div>
-    <el-card style="margin: 20px 0"
-      ><CategorySelect :isDisabled="screen != 0"></CategorySelect
-    ></el-card>
-    <el-card><SpuList></SpuList></el-card>
+    <el-card style="margin: 20px 0">
+      <CategorySelect :isDisabled="screen != 0"></CategorySelect>
+    </el-card>
+    <el-card>
+      <SpuList></SpuList>
+    </el-card>
   </div>
 </template>
 
