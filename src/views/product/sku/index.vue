@@ -38,6 +38,8 @@
       >
         <template slot-scope="{ row }">
           <!-- 上架与下架 -->
+          <!-- v-model="row.saleStatus" 接受 布尔值 -->
+          <!-- 显示标签：可用a链接包裹 -->
           <a title="上架/下架">
             <el-switch
               style="margin-right: 8px"
@@ -122,6 +124,7 @@
       <el-row>
         <el-col :span="5">商品图片</el-col>
         <el-col :span="16">
+          <!-- 轮播图 -->
           <el-carousel height="400px">
             <el-carousel-item
               v-for="item in skuInfo.skuImageList"
@@ -145,6 +148,7 @@ export default {
       page: 1,
       limit: 3,
       total: 0,
+      // 默认隐藏skuInfo
       drawer: false,
       skuInfo: {},
     };
@@ -161,6 +165,8 @@ export default {
       if (result.code == 200) {
         let { data } = result;
         this.total = data.total;
+        // 对数据进行处理
+        // data.records:原数据中只有 isSale: 0，无saleStatus属性
         data.records.forEach((item) => {
           if (item.isSale == 1) {
             // 1--上架状态
@@ -170,6 +176,7 @@ export default {
             this.$set(item, "saleStatus", false);
           }
         });
+        // 赋值展示
         this.skuList = data.records;
       }
     },
@@ -181,18 +188,19 @@ export default {
     // 上架与下架
     async changSaleStatus(row) {
       if (row.isSale == 1) {
-        // 要下架
+        // 要下架，发请求
         let result = await this.$api.sku.reqCancelSale(row.id);
         if (result.code == 200) {
           this.$message.success("下架成功");
         }
       } else {
-        // 要上架
+        // 要上架，发请求
         let result = await this.$api.sku.reqOnSale(row.id);
         if (result.code == 200) {
           this.$message.success("上架成功");
         }
       }
+      // 再次获取数据，当前页
       this.getData(this.page);
     },
     // 查看sku信息
@@ -202,6 +210,7 @@ export default {
       if (result.code == 200) {
         this.skuInfo = result.data;
       }
+      // 打开抽屉，显示skuInfo
       this.drawer = true;
     },
   },
