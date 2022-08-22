@@ -2,35 +2,17 @@
   <div class="middle">
     <el-card class="box-card">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="销售额" name="first">
-          <SaleOrVisit
-            :index="index"
-            :list="orderFullYear"
-            title="销售额"
-          ></SaleOrVisit>
-        </el-tab-pane>
-        <el-tab-pane label="访问量" name="second">
-          <SaleOrVisit
-            :index="index"
-            :list="userFullYear"
-            title="访问量"
-          ></SaleOrVisit>
-        </el-tab-pane>
+        <el-tab-pane label="销售额" name="first"></el-tab-pane>
+        <el-tab-pane label="访问量" name="second"></el-tab-pane>
+        <!-- 不放在里面 -->
+        <SaleOrVisit :index="index" :list="index === '0' ? orderFullYear : userFullYear"
+          :title="index === '0' ? '销售额' : '访问量'"></SaleOrVisit>
       </el-tabs>
     </el-card>
     <!-- 日期 -->
     <div class="block">
-      <el-date-picker
-        v-model="value2"
-        type="daterange"
-        align="right"
-        unlink-panels
-        size="mini"
-        range-separator="-"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
-        :picker-options="pickerOptions"
-      >
+      <el-date-picker v-model="value2" type="daterange" align="right" unlink-panels size="mini" range-separator="-"
+        start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
       </el-date-picker>
     </div>
   </div>
@@ -99,6 +81,7 @@ export default {
   position: relative;
   margin: 10px 0;
 }
+
 .block {
   position: absolute;
   top: 20px;
